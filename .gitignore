@@ -23,7 +23,8 @@
 hs_err_pid*
 replay_pid*
 
-# envoronment files
+# environment files
 /config
 /.idea/**
 /target/
+/.idea/
