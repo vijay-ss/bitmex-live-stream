@@ -6,9 +6,12 @@ import java.net.URISyntaxException;
 import java.util.Map;
 import java.util.concurrent.ExecutionException;
 
+import io.grpc.internal.PickFirstLoadBalancerProvider;
 import org.java_websocket.client.WebSocketClient;
 import org.java_websocket.drafts.Draft;
 import org.java_websocket.handshake.ServerHandshake;
+
+import io.grpc.LoadBalancerRegistry;
 
 public class BitmexWebsocketClient extends WebSocketClient {
 
@@ -26,22 +29,20 @@ public class BitmexWebsocketClient extends WebSocketClient {
 
     @Override
     public void onOpen(ServerHandshake handshake_data) {
-        System.out.println("Opened connection");
+        System.out.println("### Opened connection ###");
     }
 
     @Override
     public void onMessage(String message) {
-        System.out.println("received: " + message);
+        System.out.println("Received: " + message);
         Publisher bp = new Publisher();
         try {
-            Publisher.PublishToGCP(System.getProperty("projectId"), System.getProperty("topicId"), message);
-        } catch (IOException e) {
-            throw new RuntimeException(e);
-        } catch (ExecutionException e) {
-            throw new RuntimeException(e);
-        } catch (InterruptedException e) {
-            throw new RuntimeException(e);
+//            Publisher.PublishToGCP(System.getProperty("projectId"), System.getProperty("topicId"), message);
+            Publisher.PublishToGCP(System.getenv("PROJECT_ID"), System.getProperty("topicId"), message);
+        } catch (IOException | ExecutionException | InterruptedException e) {
+            e.printStackTrace();
         }
+
 
     }
 
@@ -59,8 +60,9 @@ public class BitmexWebsocketClient extends WebSocketClient {
         // if the error is fatal then onClose will be called additionally
     }
 
-    public static void main(String[] args) throws URISyntaxException {
-        Utils.readConfig();
+    public static void main(String[] args) throws URISyntaxException, IOException {
+        LoadBalancerRegistry.getDefaultRegistry().register(new PickFirstLoadBalancerProvider());
+        Utils.getCredentials();
         BitmexWebsocketClient ws = new BitmexWebsocketClient(new URI(
                 "wss://ws.bitmex.com/realtime?subscribe=instrument,orderBookL2_25,trade"));
         try {
