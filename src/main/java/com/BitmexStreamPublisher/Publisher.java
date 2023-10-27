@@ -27,7 +27,7 @@ public class Publisher {
             // Once published, returns a server-assigned message id (unique within the topic)
             ApiFuture<String> messageIdFuture = publisher.publish(pubsubMessage);
             String messageId = messageIdFuture.get();
-            System.out.printf("Published message ID: %s payload: %s", messageId, message);
+            System.out.printf("Published message ID: %s payload: %s%n", messageId, message);
         } finally {
             if (publisher != null) {
                 // When finished with the publisher, shutdown to free up resources.

@@ -1,0 +1,55 @@
+steps:
+  - id: 'create-repository'
+    name: 'gcr.io/cloud-builders/gcloud'
+    entrypoint: 'gcloud'
+    args: [
+      'artifacts',
+      'repositories',
+      'create',
+      '${_APP_NAME}',
+      '--repository-format=docker',
+      '--location=us-central1',
+      '--project=${PROJECT_ID}',
+      '--description="Docker image for data ingestion and pipeline execution"'
+    ]
+    allowFailure: true
+
+  - id: 'build-docker-image'
+    name: 'gcr.io/cloud-builders/docker'
+    args: [
+      'build',
+      '--network=cloudbuild',
+      '-t',
+      'us-central1-docker.pkg.dev/${PROJECT_ID}/${_APP_NAME}/latest',
+      '-f',
+      'Dockerfile',
+      '--build-arg=_PROJECT_ID=${PROJECT_ID}',
+      '.'
+    ]
+
+  - id: 'push-image-to-artifact-registry'
+    name: 'gcr.io/cloud-builders/docker'
+    args: [
+      'push',
+      'us-central1-docker.pkg.dev/${PROJECT_ID}/${_APP_NAME}/latest'
+    ]
+    waitFor: ['build-docker-image']
+
+  - id: 'deploy-to-cloud-run'
+    name: 'gcr.io/google.com/cloudsdktool/cloud-sdk'
+    entrypoint: 'gcloud'
+    args: [
+      'beta',
+      'run',
+      'jobs',
+      'update',
+      'bitmexapp',
+      '--image=us-central1-docker.pkg.dev/${PROJECT_ID}/${_APP_NAME}/latest',
+      '--region=us-central1',
+      '--task-timeout=3600',
+      '--max-retries=1'
+    ]
+    waitFor: ['push-image-to-artifact-registry']
+
+substitutions:
+  _APP_NAME: bitmex-pipeline
