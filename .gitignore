@@ -29,3 +29,12 @@ replay_pid*
 /.idea/
 /bitmex-stream-gcp.json
 /target/
+
+# macOS
+.AppleDouble
+.LSOverride
+.DS_Store?
+ehthumbs.db
+Icon?
+Thumbs.db
+*.DS_Store
