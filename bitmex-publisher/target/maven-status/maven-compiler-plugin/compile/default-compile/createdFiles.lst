@@ -1,0 +1,4 @@
+com/mycompany/app/AccessGcpSecret.class
+com/mycompany/app/Utils.class
+com/mycompany/app/Publisher.class
+com/mycompany/app/BitmexWebsocketClient.class

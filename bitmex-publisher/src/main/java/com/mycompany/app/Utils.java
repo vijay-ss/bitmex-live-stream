@@ -1,4 +1,4 @@
-package com.BitmexStreamPublisher;
+package com.mycompany.app;
 
 
 import java.io.File;
@@ -17,7 +17,7 @@ public class Utils {
             System.out.println("Local import failed.");
             System.out.println("Attempting GCP import...");
             try {
-                String pubSubTopic =AccessGcpSecret.accessSecretVersion(
+                String pubSubTopic = AccessGcpSecret.accessSecretVersion(
                         System.getenv("PROJECT_ID"), "topicId", "latest"
                 );
                 System.setProperty("topicId", pubSubTopic);

@@ -1,17 +1,16 @@
-package com.BitmexStreamPublisher;
+package com.mycompany.app;
+
+import io.grpc.LoadBalancerRegistry;
+import io.grpc.internal.PickFirstLoadBalancerProvider;
+import org.java_websocket.client.WebSocketClient;
+import org.java_websocket.drafts.Draft;
+import org.java_websocket.handshake.ServerHandshake;
 
 import java.io.IOException;
 import java.net.URI;
 import java.net.URISyntaxException;
 import java.util.Map;
 import java.util.concurrent.ExecutionException;
-
-import io.grpc.internal.PickFirstLoadBalancerProvider;
-import org.java_websocket.client.WebSocketClient;
-import org.java_websocket.drafts.Draft;
-import org.java_websocket.handshake.ServerHandshake;
-
-import io.grpc.LoadBalancerRegistry;
 
 public class BitmexWebsocketClient extends WebSocketClient {
 
@@ -62,7 +61,15 @@ public class BitmexWebsocketClient extends WebSocketClient {
 
     public static void main(String[] args) throws URISyntaxException, IOException {
         LoadBalancerRegistry.getDefaultRegistry().register(new PickFirstLoadBalancerProvider());
-        Utils.getCredentials();
+//        Utils.getCredentials();
+        try {
+            String pubSubTopic = AccessGcpSecret.accessSecretVersion(
+                    System.getenv("PROJECT_ID"), "topicId", "latest"
+            );
+            System.setProperty("topicId", pubSubTopic);
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
         BitmexWebsocketClient ws = new BitmexWebsocketClient(new URI(
                 "wss://ws.bitmex.com/realtime?subscribe=instrument,orderBookL2_25,trade"));
         try {

@@ -1,8 +1,9 @@
-package com.BitmexStreamPublisher;
+package com.mycompany.app;
 
 import com.google.cloud.secretmanager.v1.AccessSecretVersionResponse;
 import com.google.cloud.secretmanager.v1.SecretManagerServiceClient;
 import com.google.cloud.secretmanager.v1.SecretVersionName;
+
 import java.io.IOException;
 import java.util.zip.CRC32C;
 import java.util.zip.Checksum;

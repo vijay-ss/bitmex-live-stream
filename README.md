@@ -27,10 +27,21 @@ Alternatively:
 
 Also be sure to set the project_id as an environment variable: `export PROJECT_ID={your-project-name}`
 
-## Build docker image locally for testing
+## Compiling Maven modules
+This project leverages Apache Maven for managing dependencies of all submodules. In order to install dependencies,
+compile and execute each module, run the following:
 
-`docker build -t bitmex-stream .`
-`docker run -it bitmex-stream`
+`mvn -pl bitmex-publisher -am clean install`
+`mvn -pl bitmex-publisher -am compile`
+`mvn exec:java -pl bitmex-publisher -Dexec.mainClass=BitmexWebsocketClient`
+
+The steps above can be executed for each submodule, by replacing the name in each command.
+
+## Build Docker image locally for testing
+
+### Publisher
+`docker build . -f bitmex-publisher/Dockerfile -t bitmex-publisher`
+`docker run -it bitmex-publisher`
 
 ## Build application on Google Cloud Platform
 
