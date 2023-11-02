@@ -14,7 +14,7 @@ steps:
     ]
     allowFailure: true
 
-  - id: 'build-docker-image'
+  - id: 'build-docker-image-publisher'
     name: 'gcr.io/cloud-builders/docker'
     args: [
       'build',
@@ -22,7 +22,7 @@ steps:
       '-t',
       'us-central1-docker.pkg.dev/${PROJECT_ID}/${_APP_NAME}/latest',
       '-f',
-      'Dockerfile',
+      'bitmex-publisher/Dockerfile',
       '--build-arg=_PROJECT_ID=${PROJECT_ID}',
       '.'
     ]
@@ -33,7 +33,7 @@ steps:
       'push',
       'us-central1-docker.pkg.dev/${PROJECT_ID}/${_APP_NAME}/latest'
     ]
-    waitFor: ['build-docker-image']
+    waitFor: ['build-docker-image-publisher']
 
   - id: 'deploy-to-cloud-run'
     name: 'gcr.io/google.com/cloudsdktool/cloud-sdk'
