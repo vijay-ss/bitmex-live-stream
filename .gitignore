@@ -30,6 +30,8 @@ replay_pid*
 /bitmex-stream-gcp.json
 /target/
 /bitmex-subscriber/dependency-reduced-pom.xml
+/bitmex-publisher/target/
+/bitmex-subscriber/target/
 
 # macOS
 .AppleDouble
