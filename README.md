@@ -99,3 +99,10 @@ gcloud dataflow flex-template run "bitmex-pipeline" \
 ## References/Documentation
 1. Bitmex websocket documentation: https://www.bitmex.com/app/wsAPI#Rate-Limits
 2. Creating classic dataflow templates: https://cloud.google.com/dataflow/docs/guides/templates/creating-templates
+3. Setting pipeline options: https://cloud.google.com/dataflow/docs/guides/setting-pipeline-options
+4. Docker multi-module Maven project: https://stackoverflow.com/questions/51679363/multi-module-maven-project-on-dockers
+5. maven-exec:java goal on multi-module project: https://stackoverflow.com/questions/11091311/maven-execjava-goal-on-a-multi-module-project
+6. Maven Assembly Plugin: https://maven.apache.org/plugins/maven-assembly-plugin/usage.html
+7. https://github.com/tosun-si/teams-league-java-standard-beam
+8. https://mehmandarov.com/beam-pipeline-in-four-steps/
+9. [Build and Deploy an Apache Beam pipeline using Flex-Template](https://www.youtube.com/watch?v=gwLnrAY_Udo&list=PLZWkpQ-uRAyzw8zn7A5iBQCN0kyBh6Kqo&index=6)
