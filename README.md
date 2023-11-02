@@ -19,37 +19,37 @@ It is intended to be an end-to-end solution for ingesting and storing data on Go
 ### Load GCP credentials
 
 There are a few methods, either by referencing a local SSH key or authenticating via browser.
-`export GOOGLE_APPLICATION_CREDENTIALS=./{path-to-json}`
+- `export GOOGLE_APPLICATION_CREDENTIALS=./{path-to-json}`
 
 Alternatively:
-`gcloud auth login`
+- `gcloud auth login`
 
 Also be sure to set the project_id as an environment variable via: 
-`export PROJECT_ID={your-project-name}` or: `export PROJECT_ID=$(gcloud config get project)`
+- `export PROJECT_ID={your-project-name}` or `export PROJECT_ID=$(gcloud config get project)`
 
 ### Compiling Maven modules
 This project leverages Apache Maven for managing dependencies of all submodules. In order to install dependencies,
 compile and execute each module, run the following:
 
-`mvn -pl bitmex-publisher -am clean install`
-`mvn -pl bitmex-publisher -am compile`
-`mvn exec:java -pl bitmex-publisher -Dexec.mainClass=BitmexWebsocketClient`
+- `mvn -pl bitmex-publisher -am clean install`
+- `mvn -pl bitmex-publisher -am compile`
+- `mvn exec:java -pl bitmex-publisher -Dexec.mainClass=BitmexWebsocketClient`
 
 The steps above can be executed for each submodule, by replacing the name in each command.
 
-`mvn -pl bitmex-subscriber -am clean install`
-`mvn -pl bitmex-subscriber -am compile`
-`mvn exec:java -pl bitmex-subscriber -Dexec.mainClass=BitmexPipeline`
+- `mvn -pl bitmex-subscriber -am clean install`
+- `mvn -pl bitmex-subscriber -am compile`
+- `mvn exec:java -pl bitmex-subscriber -Dexec.mainClass=BitmexPipeline`
 
 ## Publisher
 
 ### Build Docker image locally for testing
-`docker build . -f bitmex-publisher/Dockerfile -t bitmex-publisher`
-`docker run -it bitmex-publisher`
+- `docker build . -f bitmex-publisher/Dockerfile -t bitmex-publisher`
+- `docker run -it bitmex-publisher`
 
 ### Build application on Google Cloud Platform
 
-`gcloud builds submit --config cloudbuild.yaml`
+- `gcloud builds submit --config cloudbuild.yaml`
 
 ## Subscriber
 
