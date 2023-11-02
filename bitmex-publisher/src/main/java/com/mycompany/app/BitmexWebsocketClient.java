@@ -61,15 +61,7 @@ public class BitmexWebsocketClient extends WebSocketClient {
 
     public static void main(String[] args) throws URISyntaxException, IOException {
         LoadBalancerRegistry.getDefaultRegistry().register(new PickFirstLoadBalancerProvider());
-//        Utils.getCredentials();
-        try {
-            String pubSubTopic = AccessGcpSecret.accessSecretVersion(
-                    System.getenv("PROJECT_ID"), "topicId", "latest"
-            );
-            System.setProperty("topicId", pubSubTopic);
-        } catch (Exception e) {
-            e.printStackTrace();
-        }
+        Utils.getCreds();
         BitmexWebsocketClient ws = new BitmexWebsocketClient(new URI(
                 "wss://ws.bitmex.com/realtime?subscribe=instrument,orderBookL2_25,trade"));
         try {

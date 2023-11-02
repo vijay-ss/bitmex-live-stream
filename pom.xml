@@ -11,6 +11,7 @@
 
     <modules>
         <module>bitmex-publisher</module>
+        <module>bitmex-subscriber</module>
     </modules>
 
     <properties>

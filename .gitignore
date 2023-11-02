@@ -29,6 +29,7 @@ replay_pid*
 /.idea/
 /bitmex-stream-gcp.json
 /target/
+/bitmex-subscriber/dependency-reduced-pom.xml
 
 # macOS
 .AppleDouble
