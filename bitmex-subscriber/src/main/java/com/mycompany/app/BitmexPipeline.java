@@ -8,15 +8,15 @@ import org.apache.beam.sdk.transforms.DoFn;
 import org.apache.beam.sdk.transforms.ParDo;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
-
 import java.time.Instant;
 
 public class BitmexPipeline {
-    private static final Logger LOGGER = LoggerFactory.getLogger(BitmexPipeline.class);
+    public static final Logger LOG = LoggerFactory.getLogger(BitmexPipeline.class);
 
     public static void main(String[] args) {
-        LOGGER.info("Starting stream processing");
+        LOG.info("Starting stream processing");
 
+        PipelineOptionsFactory.register(BitmexPipelineOptions.class);
         PipelineOptions options = PipelineOptionsFactory
                 .fromArgs(args)
                 .withValidation()
@@ -26,16 +26,16 @@ public class BitmexPipeline {
 
         pipeline
                 .apply("ReadStrinsFromPubsub",
-                        PubsubIO.readStrings().fromTopic("/topics/bitmex-stream/bitmex-topic"))
+                        PubsubIO.readStrings().fromTopic(((BitmexPipelineOptions) options).getPubsubTopic()))
                 .apply("PrintToStdout", ParDo.of(new DoFn<String, Void>() {
-                    @DoFn.ProcessElement
+                    @ProcessElement
                     public void processElement(ProcessContext c) {
-                        LOGGER.info("Received at {} : {}", Instant.now(), c.element());
+                        LOG.info("Received at {} : {}", Instant.now(), c.element());
                     }
                 }));
 
         pipeline.run();
 
-        LOGGER.info("End of streaming job");
+        LOG.info("End of streaming job");
     }
 }

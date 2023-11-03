@@ -27,19 +27,13 @@ Alternatively:
 Also be sure to set the project_id as an environment variable via: 
 - `export PROJECT_ID={your-project-name}` or `export PROJECT_ID=$(gcloud config get project)`
 
-### Compiling Maven modules
+### Compiling Maven modules locally
 This project leverages Apache Maven for managing dependencies of all submodules. In order to install dependencies,
 compile and execute each module, run the following:
 
 - `mvn -pl bitmex-publisher -am clean install`
 - `mvn -pl bitmex-publisher -am compile`
 - `mvn exec:java -pl bitmex-publisher -Dexec.mainClass=BitmexWebsocketClient`
-
-The steps above can be executed for each submodule, by replacing the name in each command.
-
-- `mvn -pl bitmex-subscriber -am clean install`
-- `mvn -pl bitmex-subscriber -am compile`
-- `mvn exec:java -pl bitmex-subscriber -Dexec.mainClass=BitmexPipeline`
 
 ## Publisher
 
@@ -53,13 +47,23 @@ The steps above can be executed for each submodule, by replacing the name in eac
 
 ## Subscriber
 
+### Testing locally
+Compile and execute using the following commands:
+- `mvn -pl bitmex-subscriber -am clean install`
+- `mvn -pl bitmex-subscriber -am compile`
+- `mvn exec:java -pl bitmex-subscriber -Dexec.mainClass=BitmexPipeline -Dexec.args="--pubsubTopic=${PUBSUB_TOPIC}"`
+
 ### Build Dataflow flex-template for Apache Beam
 
 - Set environment variables to be used for creating the template
 ```
 export PROJECT_ID=$(gcloud config get project)
+export PROJECT_NUMBER=$(gcloud projects list \
+--sort-by=projectId --limit=1 --filter='NAME:${PROJECT_ID}' | sed '1d' | awk '{print $3}')
 export SERVICE_ACCOUNT=$(gcloud iam service-accounts list \
- --filter "Compute Engine default service account" | sed '1d' | awk '{print $6}')
+ --filter "Compute Engine default service account" | sed '1d' | awk '{print $6}') \
+export PUBSUB_TOPIC=$(gcloud pubsub topics list \
+--filter="name.scope(projects):'${PROJECT_ID}'" --limit=1 | awk '{print $2}' | sed '1d')
 ```
 *Note: it is also possible to set these variables manually, instead of using `gcloud` commands
 
@@ -75,6 +79,7 @@ mvn -pl bitmex-subscriber clean package \
   --stagingLocation=gs://bmx_dataflow_templates/staging \
   --templateLocation=gs://bmx_dataflow_templates/templates \
   --serviceAccount=${SERVICE_ACCOUNT} \
+  --pubsubTopic=${PUBSUB_TOPIC}
   "
 ```
 
