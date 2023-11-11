@@ -10,24 +10,6 @@ import java.util.stream.Stream;
 
 public class Utils {
 
-    public static void getCredentials() throws IOException {
-        try {
-            readConfig();
-        } catch (Exception ex) {
-            ex.printStackTrace();
-            System.out.println("Local import failed.");
-            System.out.println("Attempting GCP import...");
-            try {
-                String pubSubTopic = AccessGcpSecret.accessSecretVersion(
-                        System.getenv("PROJECT_ID"), "topicId", "latest"
-                );
-                System.setProperty("topicId", pubSubTopic);
-            } catch (Exception e) {
-                e.printStackTrace();
-            }
-        }
-    }
-
     public static void getFiles() throws IOException {
         File f = new File("."); // current directory
         File[] files = f.listFiles();
@@ -42,11 +24,11 @@ public class Utils {
     }
 
     public static void getCreds() {
-
         String filePath = "./config";
         Path file = Paths.get(filePath);
 
         if(Files.exists(file)) {
+            System.out.println(filePath + " exists");
             try {
                 readConfig();
             } catch (Exception ex) {

@@ -59,7 +59,7 @@ Compile and execute using the following commands:
 ```
 export PROJECT_ID=$(gcloud config get project)
 export PROJECT_NUMBER=$(gcloud projects list \
---sort-by=projectId --limit=1 --filter='NAME:${PROJECT_ID}' | sed '1d' | awk '{print $3}')
+--sort-by=projectId --limit=1 --filter='PROJECT_ID:'$PROJECT_ID'' | sed '1d' | awk '{print $3}')
 export SERVICE_ACCOUNT=$(gcloud iam service-accounts list \
  --filter "Compute Engine default service account" | sed '1d' | awk '{print $6}') \
 export PUBSUB_TOPIC=$(gcloud pubsub topics list \
@@ -98,7 +98,8 @@ gs://bmx_dataflow_templates/templates/dataflow-template.json \
 ```
 gcloud dataflow flex-template run "bitmex-pipeline" \
 --template-file-gcs-location="gs://bmx_dataflow_templates/templates/dataflow-template.json" \
---region=us-central1
+--region=us-central1 \
+--parameters=pubsubTopic=${PUBSUB_TOPIC}
 ```
 
 ## References/Documentation
