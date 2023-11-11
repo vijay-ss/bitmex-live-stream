@@ -3,6 +3,9 @@
 This project is a real-time data streaming pipeline based on the Bitmex API/websocket forex/crypto platform. 
 It is intended to be an end-to-end solution for ingesting and storing data on Google Cloud Platform.
 
+## Architecture
+![](img/bitmex_architecture.png)
+
 ## Technology/Tools
 - Bitmex API & websocket interface
 - Google Cloud Platform
@@ -13,6 +16,12 @@ It is intended to be an end-to-end solution for ingesting and storing data on Go
 - Java
   - Maven build tools
 - Docker
+
+## Methodology
+1. Data Ingestion via websocket api, using containerized Java application
+2. Publish data to PubSub topic 
+3. Process data using Apache Beam/Dataflow service as a Subscriber
+4. Stream insert processed data into BigQuery
 
 ## Running Locally
 
@@ -27,15 +36,12 @@ Alternatively:
 Also be sure to set the project_id as an environment variable via: 
 - `export PROJECT_ID={your-project-name}` or `export PROJECT_ID=$(gcloud config get project)`
 
-### Compiling Maven modules locally
-This project leverages Apache Maven for managing dependencies of all submodules. In order to install dependencies,
-compile and execute each module, run the following:
+## Publisher
 
+### Compile and run Maven module locally
 - `mvn -pl bitmex-publisher -am clean install`
 - `mvn -pl bitmex-publisher -am compile`
 - `mvn exec:java -pl bitmex-publisher -Dexec.mainClass=BitmexWebsocketClient`
-
-## Publisher
 
 ### Build Docker image locally for testing
 - `docker build . -f bitmex-publisher/Dockerfile -t bitmex-publisher`
@@ -47,8 +53,7 @@ compile and execute each module, run the following:
 
 ## Subscriber
 
-### Testing locally
-Compile and execute using the following commands:
+### Compile and run Maven module locally
 - `mvn -pl bitmex-subscriber -am clean install`
 - `mvn -pl bitmex-subscriber -am compile`
 - `mvn exec:java -pl bitmex-subscriber -Dexec.mainClass=BitmexPipeline -Dexec.args="--pubsubTopic=${PUBSUB_TOPIC}"`

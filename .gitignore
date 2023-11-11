@@ -32,6 +32,7 @@ replay_pid*
 /bitmex-subscriber/dependency-reduced-pom.xml
 /bitmex-publisher/target/
 /bitmex-subscriber/target/
+/img/bitmex.excalidraw
 
 # macOS
 .AppleDouble
