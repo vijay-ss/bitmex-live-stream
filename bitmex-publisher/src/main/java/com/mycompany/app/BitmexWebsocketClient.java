@@ -36,7 +36,6 @@ public class BitmexWebsocketClient extends WebSocketClient {
         System.out.println("Received: " + message);
         Publisher bp = new Publisher();
         try {
-//            Publisher.PublishToGCP(System.getProperty("projectId"), System.getProperty("topicId"), message);
             Publisher.PublishToGCP(System.getenv("PROJECT_ID"), System.getProperty("topicId"), message);
         } catch (IOException | ExecutionException | InterruptedException e) {
             e.printStackTrace();
